@@ -9,7 +9,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ label, showBackArrow }) => {
   const router = useRouter();
   const handleBack = useCallback(() => {
-    router.back;
+    router.back();
   }, [router]);
 
   return (
@@ -18,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ label, showBackArrow }) => {
         {showBackArrow && (
           <BiArrowBack
             onClick={() => {
-              handleBack;
+              handleBack();
             }}
             color="white"
             size={20}

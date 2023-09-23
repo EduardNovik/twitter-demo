@@ -1,13 +1,15 @@
-import React, { useCallback } from "react";
 import { useRouter } from "next/router";
+import { useCallback } from "react";
 import { BiArrowBack } from "react-icons/bi";
 
 interface HeaderProps {
+  showBackArrow?: boolean;
   label: string;
-  showBackArrow: boolean;
 }
-const Header: React.FC<HeaderProps> = ({ label, showBackArrow }) => {
+
+const Header: React.FC<HeaderProps> = ({ showBackArrow, label }) => {
   const router = useRouter();
+
   const handleBack = useCallback(() => {
     router.back();
   }, [router]);
@@ -17,16 +19,14 @@ const Header: React.FC<HeaderProps> = ({ label, showBackArrow }) => {
       <div className="flex flex-row items-center gap-2">
         {showBackArrow && (
           <BiArrowBack
-            onClick={() => {
-              handleBack();
-            }}
+            onClick={handleBack}
             color="white"
             size={20}
             className="
-                        cursor-pointer
-                        hover:opacity-70
-                        transition
-                    "
+              cursor-pointer 
+              hover:opacity-70 
+              transition
+          "
           />
         )}
         <h1 className="text-white text-xl font-semibold">{label}</h1>

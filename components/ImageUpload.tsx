@@ -1,14 +1,15 @@
-import React, { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
 import Image from "next/image";
-interface ImageUploadProps {
+import { useCallback, useState } from "react";
+import { useDropzone } from "react-dropzone";
+
+interface DropzoneProps {
   onChange: (base64: string) => void;
   label: string;
   value?: string;
   disabled?: boolean;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({
+const ImageUpload: React.FC<DropzoneProps> = ({
   onChange,
   label,
   value,
@@ -27,12 +28,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     (files: any) => {
       const file = files[0];
       const reader = new FileReader();
-
       reader.onload = (event: any) => {
         setBase64(event.target.result);
         handleChange(event.target.result);
       };
-
       reader.readAsDataURL(file);
     },
     [handleChange]
@@ -52,7 +51,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     <div
       {...getRootProps({
         className:
-          "w-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700 cursor-pointer",
+          "w-full p-4 text-white text-center border-2 border-dotted rounded-md border-neutral-700",
       })}
     >
       <input {...getInputProps()} />

@@ -1,11 +1,13 @@
-import useRegisterModal from "@/hooks/useRegisterModal";
-import useLoginModal from "@/hooks/useLoginModal";
-import Input from "../Input";
-import Modal from "../Modal";
-import React, { useCallback, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useCallback, useState } from "react";
 import { signIn } from "next-auth/react";
+
+import useLoginModal from "@/hooks/useLoginModal";
+import useRegisterModal from "@/hooks/useRegisterModal";
+
+import Input from "../Input";
+import Modal from "../Modal";
 
 const RegisterModal = () => {
   const loginModal = useLoginModal();
@@ -13,29 +15,32 @@ const RegisterModal = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+
   const [isLoading, setIsLoading] = useState(false);
 
   const onToggle = useCallback(() => {
     if (isLoading) {
       return;
     }
+
     registerModal.onClose();
     loginModal.onOpen();
-  }, [isLoading, registerModal, loginModal]);
+  }, [loginModal, registerModal, isLoading]);
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
 
-      // todo add register and login
       await axios.post("/api/register", {
         email,
         password,
         username,
         name,
       });
+
+      setIsLoading(false);
 
       toast.success("Account created.");
 
@@ -46,47 +51,38 @@ const RegisterModal = () => {
 
       registerModal.onClose();
     } catch (error) {
-      console.log(error);
-      toast.error("Something went wrong.");
+      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
-  }, [registerModal, email, name, username, password]);
+  }, [email, password, registerModal, username, name]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <Input
+        disabled={isLoading}
         placeholder="Email"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setEmail(e.target.value)
-        }
         value={email}
-        disabled={isLoading}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <Input
+        disabled={isLoading}
         placeholder="Name"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setName(e.target.value)
-        }
         value={name}
-        disabled={isLoading}
+        onChange={(e) => setName(e.target.value)}
       />
       <Input
+        disabled={isLoading}
         placeholder="Username"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setUsername(e.target.value)
-        }
         value={username}
-        disabled={isLoading}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <Input
+        disabled={isLoading}
         placeholder="Password"
         type="password"
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setPassword(e.target.value)
-        }
         value={password}
-        disabled={isLoading}
+        onChange={(e) => setPassword(e.target.value)}
       />
     </div>
   );
@@ -98,13 +94,13 @@ const RegisterModal = () => {
         <span
           onClick={onToggle}
           className="
-            text-white
-            cursor-pointer
-            hover:underline 
+            text-white 
+            cursor-pointer 
+            hover:underline
           "
         >
           {" "}
-          Sing in
+          Sign in
         </span>
       </p>
     </div>

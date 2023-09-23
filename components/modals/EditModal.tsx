@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import { useEffect, useState } from "react";
+import axios from "axios";
+import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 
 import useCurrentUser from "@/hooks/useCurrentUser";
 import useEditModal from "@/hooks/useEditModal";
 import useUser from "@/hooks/useUser";
-import toast from "react-hot-toast";
-import axios from "axios";
-import Modal from "../Modal";
+
 import Input from "../Input";
+import Modal from "../Modal";
 import ImageUpload from "../ImageUpload";
 
 const EditModal = () => {
@@ -27,7 +27,13 @@ const EditModal = () => {
     setName(currentUser?.name);
     setUsername(currentUser?.username);
     setBio(currentUser?.bio);
-  }, [currentUser]);
+  }, [
+    currentUser?.name,
+    currentUser?.username,
+    currentUser?.bio,
+    currentUser?.profileImage,
+    currentUser?.coverImage,
+  ]);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,14 +41,13 @@ const EditModal = () => {
     try {
       setIsLoading(true);
 
-      await axios.patch("/api.edit", {
+      await axios.patch("/api/edit", {
         name,
         username,
         bio,
         profileImage,
         coverImage,
       });
-
       mutateFetchedUser();
 
       toast.success("Updated");
@@ -54,13 +59,13 @@ const EditModal = () => {
       setIsLoading(false);
     }
   }, [
-    bio,
+    editModal,
     name,
     username,
+    bio,
+    mutateFetchedUser,
     profileImage,
     coverImage,
-    editModal,
-    mutateFetchedUser,
   ]);
 
   const bodyContent = (
